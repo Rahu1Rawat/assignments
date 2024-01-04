@@ -46,4 +46,3 @@ fs.readFile("A.txt", "utf-8", (err, data) => {
 });
 ```
 
-01-js, week-1 offline, week-2 01-async-js,easy & medium assign done.

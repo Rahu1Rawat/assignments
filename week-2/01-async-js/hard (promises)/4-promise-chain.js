@@ -6,19 +6,39 @@
  */
 
 function wait1(t) {
-
+  const pr = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, t * 1000);
+  });
+  return pr;
 }
 
 function wait2(t) {
-
+  const pr = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, t * 1000);
+  });
+  return pr;
 }
 
 function wait3(t) {
-
+  const pr = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, t * 1000);
+  });
+  return pr;
 }
 
-function calculateTime(t1, t2, t3) {
-
+async function calculateTime(t1, t2, t3) {
+  const start = performance.now();
+  await wait1(t1);
+  await wait2(t2);
+  await wait3(t3);
+  const end = performance.now();
+  return end - start;
 }
 
 module.exports = calculateTime;
