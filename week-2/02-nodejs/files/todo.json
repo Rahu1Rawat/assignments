@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "First Todo",
+    "completed": false,
+    "description": "This is the first todo"
+  },
+  {
+    "id": 2,
+    "title": "Second Todo",
+    "completed": false,
+    "description": "This is the second todo"
+  },
+  {
+    "id": 3,
+    "title": "Third Todo",
+    "completed": false,
+    "description": "This is the Third todo"
+  },
+  {
+    "id": 4,
+    "title": "Fourth todo",
+    "completed": true,
+    "description": "I did first todo"
+  }
+]

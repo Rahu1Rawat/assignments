@@ -39,11 +39,87 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
+const app = express();
+
+app.use(bodyParser.json());
+
+const filePath = path.join(__dirname, "files", "todo.json");
+
+fs.readFile(filePath, "utf-8", (err, data) => {
+  if (err) {
+    console.error(err);
+  } else {
+    todos = JSON.parse(data);
+  }
+});
+// ! Retrieve all todo items.
+app.get("/todos", (req, res) => {
+  res.json(todos);
+});
+
+// ! Retrieve a specific todo item by ID.
+app.get("/todos/:id", (req, res) => {
+  const todoId = parseInt(req.params.id);
+  if (todoId >= 1 && todoId < todos.length) {
+    res.json(todos[todoId - 1]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// ! Create a new todo item.
+app.post("/todos", (req, res) => {
+  const id = todos.length + 1;
+  const newTodo = { id, ...req.body };
+  todos.push(newTodo);
+  fs.writeFile(filePath, JSON.stringify(todos), (err) => {
+    if (err) {
+      throw err;
+    } else {
+      res.status(201).json(newTodo);
+    }
+  });
+});
+
+// ! Update an existing todo item by ID.
+app.put("/todos/:id", (req, res) => {
+  const todoId = parseInt(req.params.id);
+  const index = todos.findIndex((todo) => todo.id === todoId);
+  if (index === -1) {
+    res.status(404).json({ error: "Not Found" });
+  } else {
+    const updatedTodo = { ...todos[index], ...req.body };
+    todos[index] = updatedTodo;
+    fs.writeFile(filePath, JSON.stringify(todos), (err) => {
+      if (err) {
+        throw err;
+      } else {
+        res.status(200).json(updatedTodo);
+      }
+    });
+  }
+});
+
+// ! Delete a todo item by ID.
+app.delete("/todos/:id", (req, res) => {
+  const deleteId = parseInt(req.params.id);
+  const index = todos.findIndex((todo) => todo.id === deleteId);
+  if (index === -1) {
+    res.status(404).send();
+    return;
+  }
+  todos.splice(index, 1);
+  fs.writeFile(filePath, JSON.stringify(todos), (err) => {
+    if (err) {
+      throw err;
+    } else {
+      res.status(200).send();
+    }
+  });
+});
+app.listen(3000);
+module.exports = app;
